@@ -285,12 +285,12 @@ export default function Dashboard() {
   const rawLost =
     startWeight - currentWeight;
 
-  const lost = Math.max(0, rawLost);
+  const lost = Math.max(0, rawLost).toFixed(2);
 
   const remaining = Math.max(
     0,
     currentWeight - goalWeight
-  );
+  ).toFixed(2);
 
   const totalToLose =
     startWeight - goalWeight;
