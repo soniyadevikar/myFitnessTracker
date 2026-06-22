@@ -14,7 +14,6 @@ import {
 
 import MonitorWeightIcon from "@mui/icons-material/MonitorWeight";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import FlagIcon from "@mui/icons-material/Flag";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
@@ -390,7 +389,7 @@ export default function Dashboard() {
               lineHeight: 1.08,
             }}
           >
-            Today&apos;s fitness summary
+            Today&apos;s fitness summary - {todayLabel}
           </Typography>
 
           <Typography
@@ -404,21 +403,6 @@ export default function Dashboard() {
             milestones in one compact view.
           </Typography>
         </Box>
-
-        <Chip
-          icon={<EmojiEventsIcon />}
-          label={`Only ${remaining} kg left until your goal`}
-          color="warning"
-          variant="outlined"
-          sx={{
-            height: 36,
-            borderRadius: 2,
-            px: 1,
-            backgroundColor: "#FFFBEB",
-            borderColor: "#FDE68A",
-            color: "#B45309",
-          }}
-        />
       </Stack>
 
       <Grid container spacing={1.5}>
@@ -788,48 +772,6 @@ export default function Dashboard() {
             lost={lost}
             remaining={remaining}
           />
-        </Grid>
-
-        <Grid item xs={12} sm={2} md={3} lg={3} xl={3}>
-          <Card sx={{ height: "100%", borderRadius: 2 }}>
-            <CardContent sx={{ p: 2.25 }}>
-              <Stack spacing={2}>
-                <Stack
-                  direction="row"
-                  spacing={1.25}
-                  alignItems="center"
-                >
-                  <Box
-                    sx={{
-                      ...iconTileSx,
-                      color: "#2563EB",
-                      backgroundColor: "#EFF6FF",
-                    }}
-                  >
-                    <CalendarTodayIcon fontSize="small" />
-                  </Box>
-
-                  <Box>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      fontWeight={900}
-                    >
-                      Today
-                    </Typography>
-
-                    <Typography
-                      variant="h6"
-                      fontWeight={900}
-                      sx={{ mt: 0.5, width: "120px" }}
-                    >
-                      {todayLabel}
-                    </Typography>
-                  </Box>
-                </Stack>
-              </Stack>
-            </CardContent>
-          </Card>
         </Grid>
 
         <Grid

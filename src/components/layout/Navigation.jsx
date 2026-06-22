@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react";
 import {
   AppBar,
   Box,
   Button,
+  Chip,
   Stack,
   Toolbar,
   Typography,
@@ -11,8 +13,11 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import MonitorWeightIcon from "@mui/icons-material/MonitorWeight";
 import DirectionsWalkIcon from "@mui/icons-material/DirectionsWalk";
 import SettingsIcon from "@mui/icons-material/Settings";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 
 import { NavLink } from "react-router-dom";
+import { getWeights } from "../../services/weightService";
+import { getSettings as fetchSettings } from "../../services/settingsService";
 
 const menu = [
   {
@@ -37,7 +42,57 @@ const menu = [
   },
 ];
 
+function getLatestWeight(weights) {
+  if (!weights.length) return null;
+  return weights[weights.length - 1].weight;
+}
+
 export default function Navigation() {
+  const [remaining, setRemaining] = useState("0.00");
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [weightData, settingsData] =
+          await Promise.all([
+            getWeights(),
+            fetchSettings(),
+          ]);
+
+        const DEFAULT_SETTINGS = {
+          starting_weight: 68,
+          goal_weight: 58,
+        };
+
+        const settings = settingsData || DEFAULT_SETTINGS;
+
+        const weights = (weightData || []).map(
+          (item) => ({
+            weight: item.weight,
+          })
+        );
+
+        const currentWeight =
+          getLatestWeight(weights) ??
+          settings.starting_weight;
+        const goalWeight = settings.goal_weight;
+
+        const remainingKg = Math.max(
+          0,
+          currentWeight - goalWeight
+        ).toFixed(2);
+
+        setRemaining(remainingKg);
+      } catch (error) {
+        console.error(
+          "Failed to load navigation data:",
+          error
+        );
+      }
+    };
+
+    loadData();
+  }, []);
   return (
     <AppBar
       position="sticky"
@@ -63,6 +118,9 @@ export default function Navigation() {
             sm: 3,
             lg: 4,
           },
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
         <Box
@@ -71,6 +129,7 @@ export default function Navigation() {
               xs: 150,
               sm: 190,
             },
+            flex: 0,
           }}
         >
           <Typography
@@ -102,15 +161,29 @@ export default function Navigation() {
           </Typography>
         </Box>
 
+        <Box sx={{ flex: 1, display: "flex", justifyContent: "center" }}>
+          <Chip
+            icon={<EmojiEventsIcon />}
+            label={`Only ${remaining} kg left until your goal`}
+            color="warning"
+            variant="outlined"
+            sx={{
+              height: 32,
+              borderRadius: 2,
+              px: 1,
+              backgroundColor: "#FFFBEB",
+              borderColor: "#FDE68A",
+              color: "#B45309",
+            }}
+          />
+        </Box>
+
         <Stack
           direction="row"
           spacing={0.75}
           sx={{
-            flex: 1,
-            justifyContent: {
-              xs: "flex-start",
-              md: "flex-end",
-            },
+            flex: 0,
+            minWidth: "max-content",
             overflowX: "auto",
             pb: 0.25,
             scrollbarWidth: "none",
