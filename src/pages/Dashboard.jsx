@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import dayjs from "dayjs";
 import {
   Box,
   Card,
@@ -327,11 +328,12 @@ export default function Dashboard() {
           ? "#EA580C"
           : "#DC2626";
 
-  const latestStepEntry =
-    steps[steps.length - 1] || null;
-  const hasStepEntry = steps.length > 0;
+  const todayDate = dayjs().format("YYYY-MM-DD");
+  const todayStepEntry =
+    steps.find((entry) => entry.date === todayDate) || null;
+  const hasStepEntry = todayStepEntry !== null;
   const latestSteps =
-    latestStepEntry?.steps || 0;
+    todayStepEntry?.steps || 0;
   const stepDailyGoal =
     settings.daily_step_goal || 10000;
   const stepProgress =
